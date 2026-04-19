@@ -1,0 +1,27 @@
+[project]
+name = "mcp-rag"
+version = "0.1.0"
+description = "MCP server for RAG chunk search"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=1.27.0",
+    "pydantic>=2.13.2",
+    "pydantic-settings>=2.13.1",
+    "chromadb>=1.5.8",
+    "langchain-huggingface>=1.2.2",
+    "langchain-text-splitters>=1.1.2",
+    "sentence-transformers>=5.4.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.13.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

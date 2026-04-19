@@ -1,0 +1,16 @@
+{
+  "title": "Retriever Guide",
+  "source": "github",
+  "url": "https://example.com/retriever-guide",
+  "created_at": "2026-04-18T10:00:00Z",
+  "updated_at": "2026-04-18T12:30:00Z",
+  "tags": [
+    "rag",
+    "retriever"
+  ],
+  "author": "team-rag",
+  "metadata": {
+    "lang": "en",
+    "team": "search"
+  }
+}
