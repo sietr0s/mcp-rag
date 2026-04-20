@@ -62,6 +62,9 @@ def _build_document(md_path: Path, text: str, metadata: dict) -> Document:
 def _get_document_parser(settings: AppSettings) -> DocumentParser:
     parser_type = settings.PARSER_TYPE.strip().lower()
     if parser_type == "file":
+        folder = Path(settings.LOADER_FOLDER_PATH).expanduser().resolve()
+        if not folder.exists() or not folder.is_dir():
+            raise ValueError(f"Folder does not exist or is not a directory: {folder}")
         return FileParser(
             folder_path=settings.LOADER_FOLDER_PATH,
             recursive=settings.LOADER_RECURSIVE,
@@ -107,17 +110,24 @@ def load_folder_to_rag_impl(
         source_key = str(raw.get("md_path") or raw.get("id") or raw.get("title") or "<unknown>")
         try:
             document = parser.parse(raw)
-        except (json.JSONDecodeError, KeyError, ValidationError, ValueError):
+        except (json.JSONDecodeError, KeyError, ValidationError, ValueError) as exc:
+            logger.warning(
+                "Skipping document source=%s reason=parse_error error=%s",
+                source_key,
+                exc,
+            )
             skipped_files.append(source_key)
             continue
 
         text = document.content
         if not text.strip():
+            logger.warning("Skipping document source=%s reason=empty_content", source_key)
             skipped_files.append(source_key)
             continue
 
         parts = [part.strip() for part in splitter.split_text(text) if part.strip()]
         if not parts:
+            logger.warning("Skipping document source=%s reason=no_chunks_after_split", source_key)
             skipped_files.append(source_key)
             continue
 

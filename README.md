@@ -11,6 +11,11 @@ MCP сервер для RAG-поиска по чанкам документов 
   - `get_chunk_by_id`
   - `get_document_by_id`
 
+## Архитектура (граф)
+
+- Подробная карта зависимостей и потоков: `docs/architecture-graph.md`.
+- Артефакты графа: `graphify-out/graph.json`, `graphify-out/GRAPH_REPORT.md`, `graphify-out/graph.html`.
+
 ## Быстрый старт
 
 ### 1. Установка

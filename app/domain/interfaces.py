@@ -18,18 +18,6 @@ class DocumentParser(ABC):
         raise NotImplementedError
 
 
-class DocumentRepository(ABC):
-    @abstractmethod
-    def save(self, document: Document) -> None:
-        """Persist a normalized document."""
-        raise NotImplementedError
-
-    @abstractmethod
-    def get(self, document_id: str) -> Document:
-        """Load a document by id."""
-        raise NotImplementedError
-
-
 class Embedder(ABC):
     @abstractmethod
     def embed(self, text: str) -> list[float]:

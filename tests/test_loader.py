@@ -135,10 +135,11 @@ def test_load_folder_to_rag_impl_raises_for_missing_folder(tmp_path: Path) -> No
         )
 
 
-def test_load_folder_to_rag_impl_skips_when_json_invalid(tmp_path: Path, monkeypatch) -> None:
+def test_load_folder_to_rag_impl_skips_when_json_invalid(tmp_path: Path, monkeypatch, caplog) -> None:
     (tmp_path / "doc.md").write_text("some text", encoding="utf-8")
     (tmp_path / "doc.json").write_text("{invalid", encoding="utf-8")
     _install_fake_splitter(monkeypatch, ["part 1"])
+    caplog.set_level("WARNING")
 
     settings = AppSettings(
         LOADER_FOLDER_PATH=str(tmp_path),
@@ -155,6 +156,7 @@ def test_load_folder_to_rag_impl_skips_when_json_invalid(tmp_path: Path, monkeyp
     assert result["indexed_files"] == 0
     assert result["indexed_chunks"] == 0
     assert result["skipped_files"] == [str(tmp_path / "doc.md")]
+    assert "reason=parse_error" in caplog.text
 
 
 def test_run_loader_wires_components(monkeypatch) -> None:
